@@ -1,0 +1,13 @@
+{
+  "name": "chrisbaltazar/wp-post-visits-wizard",
+  "description": "Light and easy WP plugin to manage post visits count and sorting",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "PostVisitsWizard\\": "src/"
+    }
+  }
+}
