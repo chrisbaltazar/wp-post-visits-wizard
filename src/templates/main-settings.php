@@ -31,7 +31,8 @@
                 <h4 class="my-3 text-center">Post categories</h4>
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action " v-for="category in categories"
-                       :class="{'active': category.active}">
+                       :class="{'active': category.active}"
+                       @click="save(category, 'categories')">
                         {{category.name}}
                         <span class="badge badge-pill badge-dark float-right" v-if="category.active"> ON </span>
                     </a>
@@ -41,7 +42,8 @@
                 <h4 class="my-3 text-center">Post tags</h4>
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action " v-for="tag in tags"
-                       :class="{'active': tag.active}">
+                       :class="{'active': tag.active}"
+                       @click="save(tag, 'tags')">
                         {{tag.name}}
                         <span class="badge badge-pill badge-dark float-right" v-if="tag.active"> ON </span>
                     </a>

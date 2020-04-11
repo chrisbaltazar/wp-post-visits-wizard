@@ -68,6 +68,9 @@ class Settings {
 		];
 	}
 
+	/**
+	 * @return array
+	 */
 	private function get_post_types(): array {
 		$args = [
 			'show_ui'      => true,
@@ -96,6 +99,9 @@ class Settings {
 		return array_merge( $default, $custom_post_types );
 	}
 
+	/**
+	 * @return array
+	 */
 	private function get_categories(): array {
 		$categories = [];
 
@@ -110,6 +116,9 @@ class Settings {
 		return $categories;
 	}
 
+	/**
+	 * @return array
+	 */
 	private function get_tags(): array {
 		$tags = [];
 
@@ -136,11 +145,11 @@ class Settings {
 			return new \WP_REST_Response( 'Action not allowed', 500 );
 		}
 
-		$persist_data = $this->get_persist_data( $request_data );
+		$this->persist_data( $request_data );
 
-		update_option( self::OPTION_CONFIG_NAME, $persist_data );
+		update_option( self::OPTION_CONFIG_NAME, $this->stored_data );
 
-		return new \WP_REST_Response( 'Option successfully saved!' );
+		return new \WP_REST_Response( $this->get_data() );
 	}
 
 	/**
@@ -167,7 +176,7 @@ class Settings {
 	 *
 	 * @return array
 	 */
-	private function get_persist_data( array $request ): array {
+	private function persist_data( array $request ): array {
 		if ( ! $this->exist( $request ) ) {
 			$this->insert( $request );
 
@@ -185,7 +194,7 @@ class Settings {
 	 * @return bool
 	 */
 	private function exist( $payload ): bool {
-		return in_array( $payload['id'], $this->stored_data[ $payload['target'] ] );
+		return in_array( $payload['id'], $this->stored_data[ $payload['target'] ] ?? [] );
 	}
 
 	/**
