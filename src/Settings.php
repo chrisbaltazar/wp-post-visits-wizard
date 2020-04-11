@@ -78,10 +78,20 @@ class Settings {
 		$custom_post_types = get_post_types( $args, 'objects', 'and' );
 
 		foreach ( $custom_post_types as $key => $cpt ) {
-			$custom_post_types[] = [ 'id' => $key, 'name' => $cpt->label ];
+			$custom_post_types[] = [
+				'id'     => $key,
+				'name'   => $cpt->label,
+				'active' => isset( $this->stored_data['types'][ $key ] ) ? 1 : 0
+			];
 		}
 
-		$default = [ [ 'id' => 'post', 'name' => __( 'Posts' ) ] ];
+		$default = [
+			[
+				'id'     => 'post',
+				'name'   => __( 'Posts' ),
+				'active' => isset( $this->stored_data['types']['post'] ) ? 1 : 0
+			]
+		];
 
 		return array_merge( $default, $custom_post_types );
 	}
@@ -90,7 +100,11 @@ class Settings {
 		$categories = [];
 
 		foreach ( get_categories( [ 'hide_empty' => false ] ) as $category ) {
-			$categories[] = [ 'id' => $category->slug, 'name' => $category->name ];
+			$categories[] = [
+				'id'     => $category->slug,
+				'name'   => $category->name,
+				'active' => isset( $this->stored_data['categories'][ $category->slug ] ) ? 1 : 0
+			];
 		}
 
 		return $categories;
@@ -100,7 +114,11 @@ class Settings {
 		$tags = [];
 
 		foreach ( get_categories( [ 'hide_empty' => false ] ) as $tag ) {
-			$tags[] = [ 'id' => $tag->slug, 'name' => $tag->name ];
+			$tags[] = [
+				'id'     => $tag->slug,
+				'name'   => $tag->name,
+				'active' => isset( $this->stored_data['tags'][ $tag->slug ] ) ? 1 : 0
+			];
 		}
 
 		return $tags;
