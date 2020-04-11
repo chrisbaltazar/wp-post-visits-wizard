@@ -8,9 +8,6 @@ namespace PostVisitsWizard;
  */
 class Controller {
 
-	/**
-	 *
-	 */
 	const META_COUNTER = '_post_visits_counter';
 	/**
 	 * @var Settings
@@ -43,23 +40,27 @@ class Controller {
 			return;
 		}
 
-		$post_id = get_the_ID();
+		$post = get_post();
 
-		$counter = get_post_meta( $post_id, self::META_COUNTER, true ) ?: 0;
+		if ( ! $this->should_update( $post ) ) {
+			return;
+		}
 
-		update_post_meta( $post_id, self::META_COUNTER, ++ $counter );
+		$counter = get_post_meta( $post->ID, self::META_COUNTER, true ) ?: 0;
+
+		update_post_meta( $post->ID, self::META_COUNTER, ++ $counter );
 	}
 
 	/**
 	 * @param $query
 	 */
 	public function set_custom_order( \WP_Query $query ) {
-		if ( ( ! is_category() || ! is_archive() ) || ! $query->is_main_query() ) {
+		if ( is_admin() || ! $query->is_main_query() ) {
 			return;
 		}
 
 		$query->query_vars['order']      = 'DESC';
-		$query->query_vars['orderby']    = 'meta_value date';
+		$query->query_vars['orderby']    = 'meta_value menu_order date';
 		$query->query_vars['meta_query'] = [
 			'relation' => 'OR',
 			[
@@ -71,5 +72,63 @@ class Controller {
 				'compare' => 'NOT EXISTS'
 			]
 		];
+	}
+
+	/**
+	 * @param \WP_Post $post
+	 *
+	 * @return bool
+	 */
+	private function should_update( \WP_Post $post ): bool {
+		$settings = $this->get_settings();
+
+		if ( ! in_array( $post->post_type, $settings['types'] ) ) {
+			return false;
+		}
+
+		$post_categories = wp_get_post_categories( $post->ID, [ 'fields' => 'slugs' ] );
+		if ( ! empty( $settings['categories'] ) && is_array( $post_categories ) ) {
+			$finder = array_intersect( $settings['categories'], $post_categories );
+			if ( empty( $finder ) ) {
+				return false;
+			}
+		}
+
+		$post_tags = wp_get_post_tags( $post->ID, [ 'fields' => 'slugs' ] );
+		if ( ! empty( $settings['tags'] ) && is_array( $post_tags ) ) {
+			$finder = array_intersect( $settings['tags'], $post_tags );
+			if ( empty( $finder ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @return array
+	 */
+	private function get_settings(): array {
+		$settings = $this->settings->get_data();
+
+		$settings['types'] = array_map( function ( $item ) {
+			return $item['id'];
+		}, array_filter( $settings['types'], function ( $type ) {
+			return $type['active'];
+		} ) );
+
+		$settings['categories'] = array_map( function ( $item ) {
+			return $item['id'];
+		}, array_filter( $settings['categories'], function ( $cat ) {
+			return $cat['active'];
+		} ) );
+
+		$settings['tags'] = array_map( function ( $item ) {
+			return $item['id'];
+		}, array_filter( $settings['tags'], function ( $tag ) {
+			return $tag['active'];
+		} ) );
+
+		return $settings;
 	}
 }
