@@ -64,7 +64,7 @@ class Settings {
 	 */
 	public function get_data(): array {
 		return [
-			'cpt'        => $this->get_post_types(),
+			'types'      => $this->get_post_types(),
 			'categories' => $this->get_categories(),
 			'tags'       => $this->get_tags(),
 		];

@@ -5,7 +5,7 @@ new Vue({
         emulateHTTP: true
     },
     data: {
-        cpt: pvwData.cpt,
+        types: pvwData.types,
         categories: pvwData.categories,
         tags: pvwData.tags,
     },
