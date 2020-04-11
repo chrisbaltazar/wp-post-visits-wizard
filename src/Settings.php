@@ -12,23 +12,7 @@ class Settings {
 
 	const ENDPOINT_SAVE_CONFIG = '/save';
 
-	const ENDPOINT_SET_ACTION = '/action';
-
-	const ENDPOINT_TEST_EMAIL = '/test';
-
 	const OPTION_CONFIG_NAME = Bootstrap::PLUGIN_NAME . '-config';
-
-	const OPTION_ACTION_NAME = Bootstrap::PLUGIN_NAME . '-actions';
-
-	const DEFINED_PWD_VAR = 'DEFINED_PWD';
-
-	/**
-	 *
-	 */
-	const PLUGIN_ACTIONS = [
-		'comment_for_author' => 'Notify new comments to post author',
-		'comment_for_user'   => 'Notify new replies to visitor\'s comments',
-	];
 
 	/**
 	 * @var array
@@ -40,8 +24,7 @@ class Settings {
 	 */
 	public function __construct() {
 		$this->stored_data = [
-			'config'  => get_option( self::OPTION_CONFIG_NAME, [] ),
-			'actions' => get_option( self::OPTION_ACTION_NAME, [] ),
+			'config' => get_option( self::OPTION_CONFIG_NAME, [] ),
 		];
 	}
 
@@ -65,18 +48,6 @@ class Settings {
 				'methods'  => 'POST',
 				'callback' => [ $this, 'save' ],
 			] );
-
-		register_rest_route( Bootstrap::PLUGIN_NAME, self::ENDPOINT_SET_ACTION,
-			[
-				'methods'  => 'POST',
-				'callback' => [ $this, 'switch' ],
-			] );
-
-		register_rest_route( Bootstrap::PLUGIN_NAME, self::ENDPOINT_TEST_EMAIL,
-			[
-				'methods'  => 'GET',
-				'callback' => [ $this, 'test_email' ],
-			] );
 	}
 
 	/**
@@ -84,9 +55,7 @@ class Settings {
 	 */
 	public function get_endpoints(): array {
 		return [
-			'save'   => '/wp-json/' . trim( Bootstrap::PLUGIN_NAME, '\\/' ) . '/' . ltrim( self::ENDPOINT_SAVE_CONFIG, '/' ),
-			'action' => '/wp-json/' . trim( Bootstrap::PLUGIN_NAME, '\\/' ) . '/' . ltrim( self::ENDPOINT_SET_ACTION, '/' ),
-			'test'   => '/wp-json/' . trim( Bootstrap::PLUGIN_NAME, '\\/' ) . '/' . ltrim( self::ENDPOINT_TEST_EMAIL, '/' )
+			'save' => '/wp-json/' . trim( Bootstrap::PLUGIN_NAME, '\\/' ) . '/' . ltrim( self::ENDPOINT_SAVE_CONFIG, '/' ),
 		];
 	}
 
@@ -114,10 +83,7 @@ class Settings {
 			$custom_post_types[ $key ] = [ 'name' => $cpt->label ];
 		}
 
-		$default = [
-			'post' => [ 'name' => __( 'Posts' ) ],
-			'page' => [ 'name' => __( 'Pages' ) ],
-		];
+		$default = [ 'post' => [ 'name' => __( 'Posts' ) ] ];
 
 		return array_merge( $default, $custom_post_types );
 	}

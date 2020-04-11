@@ -53,7 +53,7 @@ class Controller {
 	/**
 	 * @param $query
 	 */
-	public function set_custom_order( $query ) {
+	public function set_custom_order( \WP_Query $query ) {
 		if ( ( ! is_category() || ! is_archive() ) || ! $query->is_main_query() ) {
 			return;
 		}
