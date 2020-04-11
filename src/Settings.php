@@ -95,7 +95,9 @@ class Settings {
 	 */
 	public function get_data(): array {
 		return [
-			'cpt' => $this->get_post_types()
+			'cpt'        => $this->get_post_types(),
+			'categories' => $this->get_categories(),
+			'tags'       => $this->get_tags(),
 		];
 	}
 
@@ -109,15 +111,35 @@ class Settings {
 		$custom_post_types = get_post_types( $args, 'objects', 'and' );
 
 		foreach ( $custom_post_types as $key => $cpt ) {
-			$custom_post_types[ $key ] = [ 'label' => $cpt->label, 'slug' => $cpt->rewrite['slug'] ?? $cpt->name ];
+			$custom_post_types[ $key ] = [ 'name' => $cpt->label ];
 		}
 
 		$default = [
-			'post' => [ 'label' => __( 'Posts' ), 'slug' => 'post' ],
-			'page' => [ 'label' => __( 'Pages' ), 'slug' => 'page' ],
+			'post' => [ 'name' => __( 'Posts' ) ],
+			'page' => [ 'name' => __( 'Pages' ) ],
 		];
 
 		return array_merge( $default, $custom_post_types );
+	}
+
+	private function get_categories(): array {
+		$categories = [];
+
+		foreach ( get_categories( [ 'hide_empty' => false ] ) as $category ) {
+			$categories[ $category->slug ] = [ 'name' => $category->name ];
+		}
+
+		return $categories;
+	}
+
+	private function get_tags(): array {
+		$tags = [];
+
+		foreach ( get_categories( [ 'hide_empty' => false ] ) as $tag ) {
+			$tags[ $tag->slug ] = [ 'name' => $tag->name ];
+		}
+
+		return $tags;
 	}
 
 	/**

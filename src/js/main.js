@@ -5,17 +5,13 @@ new Vue({
         emulateHTTP: true
     },
     data: {
-        cpt: pvwData.cpt
+        cpt: pvwData.cpt,
+        categories: pvwData.categories,
+        tags: pvwData.tags,
     },
-    filters: {
-
-    },
-    computed: {
-
-    },
-    methods: {
-
-    },
+    filters: {},
+    computed: {},
+    methods: {},
     created() {
     }
 })

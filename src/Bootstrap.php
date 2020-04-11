@@ -26,19 +26,20 @@ class Bootstrap {
 	 * Bootstrap constructor.
 	 *
 	 * @param Settings $settings
+	 * @param Controller $controller
 	 */
-	public function __construct( Settings $settings ) {
+	public function __construct( Settings $settings, Controller $controller ) {
 		$this->settings   = $settings;
-		$this->controller = new Controller( $settings );
+		$this->controller = $controller;
 		$this->controller->run();
-		get_posts();
 	}
 
 	/**
 	 * Starts the magic
 	 */
 	public static function init() {
-		$obj = new self( Settings::init() );
+		$setting = Settings::init();
+		$obj     = new self( $setting, new Controller( $setting ) );
 
 		add_action( 'admin_enqueue_scripts', [ $obj, 'handle_assets' ] );
 
