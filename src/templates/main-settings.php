@@ -20,7 +20,8 @@
                 <h4 class="my-3 text-center">Post types</h4>
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action " v-for="type in types"
-                       :class="{'active': type.active}">
+                       :class="{'active': type.active}"
+                       @click="save(type, 'types')">
                         {{type.name}}
                         <span class="badge badge-pill badge-dark float-right" v-if="type.active"> ON </span>
                     </a>

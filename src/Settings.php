@@ -80,10 +80,10 @@ class Settings {
 		$custom_post_types = get_post_types( $args, 'objects', 'and' );
 
 		foreach ( $custom_post_types as $key => $cpt ) {
-			$custom_post_types[ $key ] = [ 'name' => $cpt->label ];
+			$custom_post_types[] = [ 'id' => $key, 'name' => $cpt->label ];
 		}
 
-		$default = [ 'post' => [ 'name' => __( 'Posts' ) ] ];
+		$default = [ [ 'id' => 'post', 'name' => __( 'Posts' ) ] ];
 
 		return array_merge( $default, $custom_post_types );
 	}
@@ -92,7 +92,7 @@ class Settings {
 		$categories = [];
 
 		foreach ( get_categories( [ 'hide_empty' => false ] ) as $category ) {
-			$categories[ $category->slug ] = [ 'name' => $category->name ];
+			$categories[] = [ 'id' => $category->slug, 'name' => $category->name ];
 		}
 
 		return $categories;
@@ -102,7 +102,7 @@ class Settings {
 		$tags = [];
 
 		foreach ( get_categories( [ 'hide_empty' => false ] ) as $tag ) {
-			$tags[ $tag->slug ] = [ 'name' => $tag->name ];
+			$tags[] = [ 'id' => $tag->slug, 'name' => $tag->name ];
 		}
 
 		return $tags;

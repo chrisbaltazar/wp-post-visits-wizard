@@ -55,6 +55,7 @@ class Bootstrap {
 	public function set_main_app() {
 		wp_enqueue_script( 'main-app', POST_VISITS_WIZARD_URL . '/src/js/main.js', [ 'vue-resource' ] );
 		wp_localize_script( 'main-app', 'pvwData', $this->settings->get_data() ?: (object) [] );
+		wp_localize_script( 'main-app', 'pvwEndpoint', $this->settings->get_endpoints() ?: (object) [] );
 	}
 
 	/**
