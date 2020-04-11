@@ -27,7 +27,7 @@ class Controller {
 	 * Put everything to work now
 	 */
 	public function run() {
-		add_action( 'wp', [ $this, 'register_visit' ] );
+		add_action( 'wp', [ $this, 'register_visit' ], 10 );
 	}
 
 
