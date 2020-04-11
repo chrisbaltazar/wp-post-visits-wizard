@@ -75,13 +75,13 @@ class Settings {
 			'_builtin'     => false,
 		];
 
-		$custom_post_types = get_post_types( $args, 'objects', 'and' );
+		$custom_post_types = [];
 
-		foreach ( $custom_post_types as $key => $cpt ) {
+		foreach ( get_post_types( $args, 'objects', 'and' ) as $key => $cpt ) {
 			$custom_post_types[] = [
 				'id'     => $key,
 				'name'   => $cpt->label,
-				'active' => isset( $this->stored_data['types'][ $key ] ) ? 1 : 0
+				'active' => in_array( $key, $this->stored_data['types'] ) ? 1 : 0
 			];
 		}
 
@@ -89,7 +89,7 @@ class Settings {
 			[
 				'id'     => 'post',
 				'name'   => __( 'Posts' ),
-				'active' => isset( $this->stored_data['types']['post'] ) ? 1 : 0
+				'active' => in_array( 'post', $this->stored_data['types'] ) ? 1 : 0
 			]
 		];
 
@@ -103,7 +103,7 @@ class Settings {
 			$categories[] = [
 				'id'     => $category->slug,
 				'name'   => $category->name,
-				'active' => isset( $this->stored_data['categories'][ $category->slug ] ) ? 1 : 0
+				'active' => in_array( $category->slug, $this->stored_data['categories'] ) ? 1 : 0
 			];
 		}
 
@@ -117,7 +117,7 @@ class Settings {
 			$tags[] = [
 				'id'     => $tag->slug,
 				'name'   => $tag->name,
-				'active' => isset( $this->stored_data['tags'][ $tag->slug ] ) ? 1 : 0
+				'active' => in_array( $tag->slug, $this->stored_data['tags'] ) ? 1 : 0
 			];
 		}
 
@@ -151,7 +151,6 @@ class Settings {
 	private function get_request_data( array $params ): array {
 		$target = $params['target'] ?? '';
 		$id     = sanitize_text_field( $params['id'] ?? '' );
-		$stat   = $params['stat'] ?? '';
 
 		if ( ! in_array( $target, [ 'types', 'categories', 'tags' ] ) ) {
 			return [];
@@ -160,7 +159,6 @@ class Settings {
 		return [
 			'target' => $target,
 			'id'     => $id,
-			'stat'   => (bool) $stat
 		];
 	}
 
@@ -170,15 +168,38 @@ class Settings {
 	 * @return array
 	 */
 	private function get_persist_data( array $request ): array {
-		if ( ! $request['stat'] ) {
-			$this->stored_data[ $request['target'] ][ $request['id'] ] = true;
+		if ( ! $this->exist( $request ) ) {
+			$this->insert( $request );
 
 			return $this->stored_data;
 		}
 
-		unset( $this->stored_data[ $request['target'] ][ $request['id'] ] );
+		$this->delete( $request );
 
 		return $this->stored_data;
 	}
 
+	/**
+	 * @param $payload
+	 *
+	 * @return bool
+	 */
+	private function exist( $payload ): bool {
+		return in_array( $payload['id'], $this->stored_data[ $payload['target'] ] );
+	}
+
+	/**
+	 * @param array $request
+	 */
+	private function delete( array $request ) {
+		$finder = array_search( $request['id'], $this->stored_data[ $request['target'] ] );
+		unset( $this->stored_data[ $request['target'] ][ $finder ] );
+	}
+
+	/**
+	 * @param array $request
+	 */
+	private function insert( array $request ) {
+		$this->stored_data[ $request['target'] ][] = $request['id'];
+	}
 }

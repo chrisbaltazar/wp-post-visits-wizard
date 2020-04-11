@@ -17,7 +17,6 @@ new Vue({
             const data = {
                 'target': target,
                 'id': item.id,
-                'stat': item.active
             }
 
             this.$http.post(this.endpoint.save, data).then(
