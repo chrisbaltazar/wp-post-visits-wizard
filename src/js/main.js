@@ -14,7 +14,6 @@ new Vue({
     computed: {},
     methods: {
         save(item, target) {
-
             const data = {
                 'target': target,
                 'id': item.id,

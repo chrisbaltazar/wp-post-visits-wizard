@@ -23,9 +23,7 @@ class Settings {
 	 * Settings constructor.
 	 */
 	public function __construct() {
-		$this->stored_data = [
-			'config' => get_option( self::OPTION_CONFIG_NAME, [] ),
-		];
+		$this->stored_data = get_option( self::OPTION_CONFIG_NAME, [] );
 	}
 
 	/**
@@ -117,12 +115,52 @@ class Settings {
 		$request_data = $this->get_request_data( $request->get_body_params() );
 
 		if ( empty( $request_data ) ) {
-			return new \WP_REST_Response( 'Please check again your entries and try again.', 500 );
+			return new \WP_REST_Response( 'Action not allowed', 500 );
 		}
 
-		update_option( self::OPTION_CONFIG_NAME, $request_data );
+		$persist_data = $this->get_persist_data( $request_data );
 
-		return new \WP_REST_Response( 'Settings successfully saved!' );
+		update_option( self::OPTION_CONFIG_NAME, $persist_data );
+
+		return new \WP_REST_Response( 'Option successfully saved!' );
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	private function get_request_data( array $params ): array {
+		$target = $params['target'] ?? '';
+		$id     = sanitize_text_field( $params['id'] ?? '' );
+		$stat   = $params['stat'] ?? '';
+
+		if ( ! in_array( $target, [ 'types', 'categories', 'tags' ] ) ) {
+			return [];
+		}
+
+		return [
+			'target' => $target,
+			'id'     => $id,
+			'stat'   => (bool) $stat
+		];
+	}
+
+	/**
+	 * @param array $request
+	 *
+	 * @return array
+	 */
+	private function get_persist_data( array $request ): array {
+		if ( ! $request['stat'] ) {
+			$this->stored_data[ $request['target'] ][ $request['id'] ] = true;
+
+			return $this->stored_data;
+		}
+
+		unset( $this->stored_data[ $request['target'] ][ $request['id'] ] );
+
+		return $this->stored_data;
 	}
 
 }
