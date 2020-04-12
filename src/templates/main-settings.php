@@ -6,7 +6,7 @@
             <div class="col-12">
                 <div class="alert alert-primary p-m">
                     <div class="container-fluid text-center">
-                        <h1 class="display-4">Post Visits Wizard Config</h1>
+                        <h1 class="display-4">Post Visits Wizard</h1>
                         <p class="lead">Just select the desired types, categories and tags you want to manage</p>
                         <p class="lead">After that all of them will register their visits count and get re ordered as
                             well in listings</p>
@@ -36,7 +36,11 @@
                         {{category.name}}
                         <span class="badge badge-pill badge-dark float-right" v-if="category.active"> ON </span>
                     </a>
+                    <a class="list-group-item list-group-item-action disabled" v-if="!categories">
+                        None
+                    </a>
                 </div>
+                <p class="my-3 text-center" v-if="categories">No selection will be considered as all of them</p>
             </div>
             <div class="col-12 col-md-4">
                 <h4 class="my-3 text-center">Post tags</h4>
@@ -47,7 +51,11 @@
                         {{tag.name}}
                         <span class="badge badge-pill badge-dark float-right" v-if="tag.active"> ON </span>
                     </a>
+                    <a class="list-group-item list-group-item-action disabled" v-if="!tags">
+                        None
+                    </a>
                 </div>
+                <p class="my-3 text-center" v-if="tags">No selection will be considered as all of them</p>
             </div>
         </div>
     </div>
