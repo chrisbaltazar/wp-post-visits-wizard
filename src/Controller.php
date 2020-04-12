@@ -38,8 +38,8 @@ class Controller {
 			$filter_data   = sprintf( 'manage_%s_posts_custom_column', $cpt );
 
 			if ( $cpt === 'post' ) {
-				$filter_column = str_replace( '_posts_', '', $filter_column );
-				$filter_data   = str_replace( '_posts_', '', $filter_data );
+				$filter_column = str_replace( '_posts', '', $filter_column );
+				$filter_data   = str_replace( '_posts', '', $filter_data );
 			}
 
 			add_filter( $filter_column, [ $this, 'add_post_table_column' ], 10, 1 );
