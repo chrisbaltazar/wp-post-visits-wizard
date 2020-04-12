@@ -31,7 +31,6 @@ class Controller {
 	 */
 	public function run() {
 		add_action( 'wp', [ $this, 'register_visit' ], 10 );
-//		add_action( 'pre_get_posts', [ $this, 'set_custom_order' ], 10, 1 );
 		add_filter( 'the_posts', [ $this, 'set_custom_order' ], 10, 2 );
 		add_action( 'wp_loaded', [ $this, 'handle_post_tables' ], 10 );
 	}
