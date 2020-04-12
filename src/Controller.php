@@ -31,7 +31,8 @@ class Controller {
 	 */
 	public function run() {
 		add_action( 'wp', [ $this, 'register_visit' ], 10 );
-		add_action( 'pre_get_posts', [ $this, 'set_custom_order' ], 10, 1 );
+//		add_action( 'pre_get_posts', [ $this, 'set_custom_order' ], 10, 1 );
+		add_filter( 'the_posts', [ $this, 'set_custom_order' ], 10, 2 );
 		add_action( 'wp_loaded', [ $this, 'handle_post_tables' ], 10 );
 	}
 
@@ -97,31 +98,24 @@ class Controller {
 	}
 
 	/**
+	 * @param $posts
 	 * @param $query
 	 *
 	 * @return void|\WP_Query
 	 */
-	public function set_custom_order( \WP_Query $query ) {
+	public function set_custom_order( $posts, $query ) {
 		if ( is_admin() || ! $this->should_order( $query ) ) {
-			return;
+			return $posts;
 		}
 
-		$query->query_vars['order']      = 'DESC';
-		$query->query_vars['orderby']    = 'meta_value_num ' . $query->query_vars['orderby'] ?? 'date';
-		$query->query_vars['meta_query'] = array_merge( $query->query_vars['meta_query'] ?? [],
-			[
-				'relation' => 'OR',
-				[
-					'key'     => self::META_COUNTER,
-					'compare' => 'EXISTS'
-				],
-				[
-					'key'     => self::META_COUNTER,
-					'compare' => 'NOT EXISTS'
-				]
-			] );
+		usort( $posts, function ( $post1, $post2 ) {
+			$c1 = get_post_meta( $post1->ID, self::META_COUNTER, true ) ?: 0;
+			$c2 = get_post_meta( $post2->ID, self::META_COUNTER, true ) ?: 0;
 
-		return $query;
+			return $c2 <=> $c1;
+		} );
+
+		return $posts;
 	}
 
 	/**
