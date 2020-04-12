@@ -1,4 +1,4 @@
-=== WP Simple Notify ===
+=== WP Post Visits Wizard ===
 Contributors: christianbaltazar
 Donate link: https://paypal.me/pools/c/8npKpqMHCF
 Tags: comments, notifications, email
@@ -9,24 +9,23 @@ Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Easiest WP Plugin to manage email notifications for common events such as user's post comments.
+WP Plugin to easily handle visits count on your posts and custom sorting based on this value
 
 == Description ==
 
-Easy to setup and get the ball rolling, you just need to fill out the common email config fields as any other webmail client
+Quick setup, just install the plugin and the select in the Setting section any of the post types, categories and / or tags you want to manage
 
-**Works also for private providers like AWS SES**
-*After that you can just select the desired evens to be notified about and that's it*
+Then you will be able to see a new column on each post table showing their current count value
 
-Manage everything from a single and very dynamic admin screen in your dashboard and get the plugin working just in a few minutes
+All listings will be sorted as well based on the most visited ones
 
-Just install it and then do directly into Settings / WP Simple Notify to see all the options. Enjoy it!
+After installation go to your admin dashboard / Settings / WP Post Visits Wizard and make your selection to work with
 
 == Screenshots ==
 
-1. Fill out the basic email data like any other application
-2. It works also for custom SMTP providers such Amazon SES and comes with a safe password storage method for your sake
-3. Finally just select what notifications would you like to manage :)
+1. Select any of the POST TYPES you want to manahe with the plugin, and / or their categories, tags as well
+2. Monitor from your admin dashboard the current visits value for every post
+3. Display automatically your posts with the most visited on the top
 
 == Installation ==
 
@@ -34,12 +33,6 @@ Just install it and then do directly into Settings / WP Simple Notify to see all
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
 == Changelog ==
-
-= 1.2 =
-* Change main buttons layout and config labels for better understanding
-
-= 1.1 =
-* Small refactor to handle better email messages
 
 = 1.0 =
 * First plugin version in place
