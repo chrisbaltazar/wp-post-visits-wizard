@@ -45,11 +45,11 @@ class Controller {
 			$filter_data   = sprintf( 'manage_%s_posts_custom_column', $cpt );
 
 			if ( $cpt === 'post' ) {
-				$filter_column = str_replace( '_posts', '', $filter_column );
-				$filter_data   = str_replace( '_posts', '', $filter_data );
+				$filter_column = str_replace( '_post_', '_', $filter_column );
+				$filter_data   = str_replace( '_post_', '_', $filter_data );
 			}
 
-			add_filter( $filter_column, [ $this, 'add_post_table_column' ], 10, 1 );
+			add_filter( $filter_column, [ $this, 'add_post_table_column' ], 1, 1 );
 			add_action( $filter_data, [ $this, 'set_post_column_data' ], 10, 2 );
 		}
 	}

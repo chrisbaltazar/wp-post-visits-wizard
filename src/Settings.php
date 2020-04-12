@@ -123,7 +123,7 @@ class Settings {
 	private function get_tags(): array {
 		$tags = [];
 
-		foreach ( get_categories( [ 'hide_empty' => false ] ) as $tag ) {
+		foreach ( get_tags( [ 'hide_empty' => false ] ) as $tag ) {
 			$tags[] = [
 				'id'     => $tag->slug,
 				'name'   => $tag->name,
