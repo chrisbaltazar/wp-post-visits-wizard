@@ -1,13 +1,14 @@
-# WP 
+# WP Post Visits Wizard
 
-WP Plugin to manage email notifications for common events such as user's comments
+WP Plugin to easily handle visits count on your posts and custom sorting based on this value
 
 ## Usage
 
-Easy to setup and get the ball rolling, just need to fill out the common email config fields as any other webmail client
+Quick setup, just install the plugin and the select in the Setting section any of the post types, categories and / or tags you want to manage
 
-- Works also for private providers like AWS SES 
-- After you can just select the desired evens to be notified about
+Then you will be able to see a new column on each post table showing their current count value 
+
+All listings will be sorted as well based on the most visited ones 
 
 ## Installation
 
@@ -15,9 +16,7 @@ Easy to setup and get the ball rolling, just need to fill out the common email c
 
 - Run ``composer install`` inside the new directory you got it
 
-- Go to your admin dashboard /Settings / WP Simple Notify and complete the required data 
-
-- Setup the options you need and enjoy 
+- Go to your admin dashboard / Settings / WP Post Visits Wizard and make your selection to work with  
 
 
 ## Contributing
