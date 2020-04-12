@@ -70,7 +70,7 @@ class Controller {
 	 * @param $post_id
 	 */
 	public function set_post_column_data( $column, $post_id ) {
-		if ( $column !== self::POST_TABLE_COLUMN ) {
+		if ( is_string( $column ) && $column !== self::POST_TABLE_COLUMN ) {
 			return;
 		}
 
