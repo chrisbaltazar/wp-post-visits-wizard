@@ -78,14 +78,14 @@ class Settings {
 			'_builtin'     => false,
 		];
 
-		$cpts =  get_post_types( $args, 'objects', 'and' );
+		$cpts              = get_post_types( $args, 'objects', 'and' );
 		$custom_post_types = [];
 
-		foreach ($cpts as $key => $cpt ) {
+		foreach ( $cpts as $key => $cpt ) {
 			$custom_post_types[] = [
 				'id'     => $key,
 				'name'   => $cpt->label,
-				'active' => in_array( $key, $this->stored_data['types'] ) ? 1 : 0
+				'active' => in_array( $key, $this->stored_data['types'] ?? [] ) ? 1 : 0
 			];
 		}
 
@@ -93,7 +93,7 @@ class Settings {
 			[
 				'id'     => 'post',
 				'name'   => __( 'Posts' ),
-				'active' => in_array( 'post', $this->stored_data['types'] ) ? 1 : 0
+				'active' => in_array( 'post', $this->stored_data['types'] ?? [] ) ? 1 : 0
 			]
 		];
 
@@ -110,7 +110,7 @@ class Settings {
 			$categories[] = [
 				'id'     => $category->slug,
 				'name'   => $category->name,
-				'active' => in_array( $category->slug, $this->stored_data['categories'] ) ? 1 : 0
+				'active' => in_array( $category->slug, $this->stored_data['categories'] ?? [] ) ? 1 : 0
 			];
 		}
 
@@ -127,7 +127,7 @@ class Settings {
 			$tags[] = [
 				'id'     => $tag->slug,
 				'name'   => $tag->name,
-				'active' => in_array( $tag->slug, $this->stored_data['tags'] ) ? 1 : 0
+				'active' => in_array( $tag->slug, $this->stored_data['tags'] ?? [] ) ? 1 : 0
 			];
 		}
 
