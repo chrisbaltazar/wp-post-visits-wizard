@@ -98,25 +98,30 @@ class Controller {
 
 	/**
 	 * @param $query
+	 *
+	 * @return void|\WP_Query
 	 */
 	public function set_custom_order( \WP_Query $query ) {
-		if ( is_admin() || ! $query->is_main_query() ) {
+		if ( is_admin() || ! $this->should_order( $query ) ) {
 			return;
 		}
 
 		$query->query_vars['order']      = 'DESC';
-		$query->query_vars['orderby']    = 'meta_value menu_order date';
-		$query->query_vars['meta_query'] = [
-			'relation' => 'OR',
+		$query->query_vars['orderby']    = 'meta_value_num ' . $query->query_vars['orderby'] ?? 'date';
+		$query->query_vars['meta_query'] = array_merge( $query->query_vars['meta_query'] ?? [],
 			[
-				'key'     => self::META_COUNTER,
-				'compare' => 'EXISTS'
-			],
-			[
-				'key'     => self::META_COUNTER,
-				'compare' => 'NOT EXISTS'
-			]
-		];
+				'relation' => 'OR',
+				[
+					'key'     => self::META_COUNTER,
+					'compare' => 'EXISTS'
+				],
+				[
+					'key'     => self::META_COUNTER,
+					'compare' => 'NOT EXISTS'
+				]
+			] );
+
+		return $query;
 	}
 
 	/**
@@ -127,7 +132,7 @@ class Controller {
 	private function should_update( \WP_Post $post ): bool {
 		$settings = $this->get_settings();
 
-		if ( ! in_array( $post->post_type, $settings['types'] ) ) {
+		if ( ! in_array( $post->post_type, $settings['types'] ) || $post->post_status !== 'publish' ) {
 			return false;
 		}
 
@@ -148,6 +153,16 @@ class Controller {
 		}
 
 		return true;
+	}
+
+	private function should_order( \WP_Query $query ): bool {
+		$settings        = $this->get_settings();
+		$query_post_type = $query->query['post_type'] ?? $query->query_vars['post_type'] ?? '';
+		if ( in_array( $query_post_type, $settings['types'] ) ) {
+			return true;
+		}
+
+		return empty( $query_post_type ) && ( $query->is_archive() || $query->is_category() || $query->is_tag() );
 	}
 
 	/**
