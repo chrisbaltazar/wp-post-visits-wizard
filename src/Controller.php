@@ -23,7 +23,7 @@ class Controller {
 	 * @param Settings $settings
 	 */
 	public function __construct( Settings $settings ) {
-		$this->settings = $this->get_settings( $settings->get_data() );
+		$this->settings = $settings;
 	}
 
 	/**
@@ -32,8 +32,15 @@ class Controller {
 	public function run() {
 		add_action( 'wp', [ $this, 'register_visit' ], 10 );
 		add_action( 'pre_get_posts', [ $this, 'set_custom_order' ], 10, 1 );
+		add_action( 'wp_loaded', [ $this, 'handle_post_tables' ], 10 );
+	}
 
-		foreach ( $this->settings['types'] as $cpt ) {
+	/**
+	 * Set filter to manage admin tables
+	 */
+	public function handle_post_tables() {
+		$settings = $this->get_settings();
+		foreach ( $settings['types'] as $cpt ) {
 			$filter_column = sprintf( 'manage_%s_posts_columns', $cpt );
 			$filter_data   = sprintf( 'manage_%s_posts_custom_column', $cpt );
 
@@ -118,21 +125,23 @@ class Controller {
 	 * @return bool
 	 */
 	private function should_update( \WP_Post $post ): bool {
-		if ( ! in_array( $post->post_type, $this->settings['types'] ) ) {
+		$settings = $this->get_settings();
+
+		if ( ! in_array( $post->post_type, $settings['types'] ) ) {
 			return false;
 		}
 
 		$post_categories = wp_get_post_categories( $post->ID, [ 'fields' => 'slugs' ] );
-		if ( ! empty( $this->settings['categories'] ) && is_array( $post_categories ) ) {
-			$finder = array_intersect( $this->settings['categories'], $post_categories );
+		if ( ! empty( $settings['categories'] ) && is_array( $post_categories ) ) {
+			$finder = array_intersect( $settings['categories'], $post_categories );
 			if ( empty( $finder ) ) {
 				return false;
 			}
 		}
 
 		$post_tags = wp_get_post_tags( $post->ID, [ 'fields' => 'slugs' ] );
-		if ( ! empty( $this->settings['tags'] ) && is_array( $post_tags ) ) {
-			$finder = array_intersect( $this->settings['tags'], $post_tags );
+		if ( ! empty( $settings['tags'] ) && is_array( $post_tags ) ) {
+			$finder = array_intersect( $settings['tags'], $post_tags );
 			if ( empty( $finder ) ) {
 				return false;
 			}
@@ -142,11 +151,11 @@ class Controller {
 	}
 
 	/**
-	 * @param array $settings_data
-	 *
 	 * @return array
 	 */
-	private function get_settings( array $settings_data ): array {
+	private function get_settings(): array {
+		$settings_data = $this->settings->get_data();
+
 		$settings_data['types'] = array_map( function ( $item ) {
 			return $item['id'];
 		}, array_filter( $settings_data['types'], function ( $type ) {

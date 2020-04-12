@@ -78,9 +78,10 @@ class Settings {
 			'_builtin'     => false,
 		];
 
+		$cpts =  get_post_types( $args, 'objects', 'and' );
 		$custom_post_types = [];
 
-		foreach ( get_post_types( $args, 'objects', 'and' ) as $key => $cpt ) {
+		foreach ($cpts as $key => $cpt ) {
 			$custom_post_types[] = [
 				'id'     => $key,
 				'name'   => $cpt->label,
