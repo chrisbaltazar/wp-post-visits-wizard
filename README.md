@@ -1,4 +1,4 @@
-# WP Simple Notify 
+# WP 
 
 WP Plugin to manage email notifications for common events such as user's comments
 

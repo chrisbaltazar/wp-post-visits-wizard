@@ -74,7 +74,9 @@ class Controller {
 			return;
 		}
 
-		echo get_post_meta( $post_id, self::META_COUNTER, true ) ?: 0;
+		$count = get_post_meta( $post_id, self::META_COUNTER, true ) ?: 0;
+
+		echo '<div style = "text-align:center">' . $count . '</div>';
 	}
 
 	/**
