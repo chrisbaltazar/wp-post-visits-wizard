@@ -60,6 +60,10 @@ class Controller {
 	 * @return array
 	 */
 	public function add_post_table_column( $columns ) {
+		if ( in_array( self::POST_TABLE_COLUMN, $columns ) ) {
+			return $columns;
+		}
+
 		$columns[] = self::POST_TABLE_COLUMN;
 
 		return $columns;
