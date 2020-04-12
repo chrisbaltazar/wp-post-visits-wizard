@@ -29,7 +29,7 @@ After installation go to your admin dashboard / Settings / WP Post Visits Wizard
 
 == Installation ==
 
-1. Either upload the plugin files to the `/wp-content/plugins/wp-simple-notify` directory, or install the plugin through the WordPress plugins screen directly.
+1. Either upload the plugin files to the `/wp-content/plugins/wp-post-visits-wizard` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
 == Changelog ==
