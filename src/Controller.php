@@ -20,7 +20,7 @@ class Controller {
 	 * @param Settings $settings
 	 */
 	public function __construct( Settings $settings ) {
-		$this->settings = $settings;
+		$this->settings = $this->get_settings( $settings->get_data() );
 	}
 
 	/**
@@ -80,23 +80,21 @@ class Controller {
 	 * @return bool
 	 */
 	private function should_update( \WP_Post $post ): bool {
-		$settings = $this->get_settings();
-
-		if ( ! in_array( $post->post_type, $settings['types'] ) ) {
+		if ( ! in_array( $post->post_type, $this->settings['types'] ) ) {
 			return false;
 		}
 
 		$post_categories = wp_get_post_categories( $post->ID, [ 'fields' => 'slugs' ] );
-		if ( ! empty( $settings['categories'] ) && is_array( $post_categories ) ) {
-			$finder = array_intersect( $settings['categories'], $post_categories );
+		if ( ! empty( $this->settings['categories'] ) && is_array( $post_categories ) ) {
+			$finder = array_intersect( $this->settings['categories'], $post_categories );
 			if ( empty( $finder ) ) {
 				return false;
 			}
 		}
 
 		$post_tags = wp_get_post_tags( $post->ID, [ 'fields' => 'slugs' ] );
-		if ( ! empty( $settings['tags'] ) && is_array( $post_tags ) ) {
-			$finder = array_intersect( $settings['tags'], $post_tags );
+		if ( ! empty( $this->settings['tags'] ) && is_array( $post_tags ) ) {
+			$finder = array_intersect( $this->settings['tags'], $post_tags );
 			if ( empty( $finder ) ) {
 				return false;
 			}
@@ -106,29 +104,29 @@ class Controller {
 	}
 
 	/**
+	 * @param array $settings_data
+	 *
 	 * @return array
 	 */
-	private function get_settings(): array {
-		$settings = $this->settings->get_data();
-
-		$settings['types'] = array_map( function ( $item ) {
+	private function get_settings( array $settings_data ): array {
+		$settings_data['types'] = array_map( function ( $item ) {
 			return $item['id'];
-		}, array_filter( $settings['types'], function ( $type ) {
+		}, array_filter( $settings_data['types'], function ( $type ) {
 			return $type['active'];
 		} ) );
 
-		$settings['categories'] = array_map( function ( $item ) {
+		$settings_data['categories'] = array_map( function ( $item ) {
 			return $item['id'];
-		}, array_filter( $settings['categories'], function ( $cat ) {
+		}, array_filter( $settings_data['categories'], function ( $cat ) {
 			return $cat['active'];
 		} ) );
 
-		$settings['tags'] = array_map( function ( $item ) {
+		$settings_data['tags'] = array_map( function ( $item ) {
 			return $item['id'];
-		}, array_filter( $settings['tags'], function ( $tag ) {
+		}, array_filter( $settings_data['tags'], function ( $tag ) {
 			return $tag['active'];
 		} ) );
 
-		return $settings;
+		return $settings_data;
 	}
 }

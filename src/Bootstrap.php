@@ -38,8 +38,8 @@ class Bootstrap {
 	 * Starts the magic
 	 */
 	public static function init() {
-		$setting = Settings::init();
-		$obj     = new self( $setting, new Controller( $setting ) );
+		$settings = Settings::init();
+		$obj      = new self( $settings, new Controller( $settings ) );
 
 		add_action( 'admin_enqueue_scripts', [ $obj, 'handle_assets' ] );
 
