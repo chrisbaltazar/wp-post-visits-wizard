@@ -150,9 +150,16 @@ class Controller {
 		return true;
 	}
 
-	private function should_order( \WP_Query $query ): bool {
+	/**
+	 * @param array $posts
+	 * @param \WP_Query $query
+	 *
+	 * @return bool
+	 */
+	private function should_order( array $posts, \WP_Query $query ): bool {
 		$settings        = $this->get_settings();
 		$query_post_type = $query->query['post_type'] ?? $query->query_vars['post_type'] ?? '';
+
 		if ( in_array( $query_post_type, $settings['types'] ) ) {
 			return true;
 		}
@@ -161,7 +168,26 @@ class Controller {
 			return true;
 		}
 
-		return $query->is_tag() && in_array( $query->get( 'tag' ), $settings['tags'] );
+		if ( $query->is_tag() && in_array( $query->get( 'tag' ), $settings['tags'] ) ) {
+			return true;
+		}
+
+		return empty( $query_post_type ) && in_array( $this->extract_type( $posts ), $settings['types'] );
+	}
+
+	/**
+	 * @param array $posts
+	 *
+	 * @return string
+	 */
+	private function extract_type( array $posts ): string {
+		$post_types = array_map( function ( $post ) {
+			return $post->post_type ?? '';
+		}, $posts );
+
+		$post_types = array_unique( $post_types );
+
+		return count( $post_types ) === 1 ? current( $post_types ) : '';
 	}
 
 	/**
