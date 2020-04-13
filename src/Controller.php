@@ -157,7 +157,11 @@ class Controller {
 			return true;
 		}
 
-		return empty( $query_post_type ) && ( $query->is_archive() || $query->is_category() || $query->is_tag() );
+		if ( $query->is_category() && in_array( $query->get( 'category_name' ), $settings['categories'] ) ) {
+			return true;
+		}
+
+		return $query->is_tag() && in_array( $query->get( 'tag' ), $settings['tags'] );
 	}
 
 	/**
