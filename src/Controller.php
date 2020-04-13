@@ -105,7 +105,7 @@ class Controller {
 	 * @return void|\WP_Query
 	 */
 	public function set_custom_order( $posts, $query ) {
-		if ( is_admin() || ! $this->should_order( $query ) ) {
+		if ( is_admin() || ! $this->should_order( $posts, $query ) ) {
 			return $posts;
 		}
 
