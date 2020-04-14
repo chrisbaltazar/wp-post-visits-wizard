@@ -160,19 +160,23 @@ class Controller {
 		$settings        = $this->get_settings();
 		$query_post_type = $query->query['post_type'] ?? $query->query_vars['post_type'] ?? '';
 
-		if ( in_array( $query_post_type, $settings['types'] ) ) {
-			return true;
+		if ( $query_post_type && ! in_array( $query_post_type, $settings['types'] ) ) {
+			return false;
 		}
 
-		if ( $query->is_category() && in_array( $query->get( 'category_name' ), $settings['categories'] ) ) {
-			return true;
+		if ( $query->is_category() && ! in_array( $query->get( 'category_name' ), $settings['categories'] ) ) {
+			return false;
 		}
 
-		if ( $query->is_tag() && in_array( $query->get( 'tag' ), $settings['tags'] ) ) {
-			return true;
+		if ( $query->is_tag() && ! in_array( $query->get( 'tag' ), $settings['tags'] ) ) {
+			return false;
 		}
 
-		return empty( $query_post_type ) && in_array( $this->extract_type( $posts ), $settings['types'] );
+		if ( empty( $query_post_type ) && ! in_array( $this->extract_type( $posts ), $settings['types'] ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
