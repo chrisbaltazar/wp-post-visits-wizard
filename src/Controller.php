@@ -60,6 +60,10 @@ class Controller {
 	 * @return array
 	 */
 	public function add_post_table_column( $columns ) {
+		if ( ! is_array( $columns ) ) {
+			return $columns;
+		}
+
 		$columns[] = self::POST_TABLE_COLUMN;
 
 		return array_unique( $columns );
@@ -83,13 +87,13 @@ class Controller {
 	 *
 	 */
 	public function register_visit() {
-		if ( ! is_single() || is_admin() ) {
+		if ( ! is_single() ) {
 			return;
 		}
 
 		$post = get_post();
 
-		if ( ! $this->should_update( $post ) ) {
+		if ( ! $post || ! $this->should_update( $post ) ) {
 			return;
 		}
 
@@ -102,10 +106,10 @@ class Controller {
 	 * @param $posts
 	 * @param $query
 	 *
-	 * @return void|\WP_Query
+	 * @return array
 	 */
 	public function set_custom_order( $posts, $query ) {
-		if ( is_admin() || ! $this->should_order( $posts, $query ) ) {
+		if ( is_admin() || ! is_array( $posts ) || ! $this->should_order( $posts, $query ) ) {
 			return $posts;
 		}
 
