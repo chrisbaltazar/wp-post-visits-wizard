@@ -33,6 +33,7 @@ class Controller {
 		add_action( 'wp', [ $this, 'register_visit' ], 10 );
 		add_filter( 'the_posts', [ $this, 'set_custom_order' ], 10, 2 );
 		add_action( 'wp_loaded', [ $this, 'handle_post_tables' ], 10 );
+		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ], 10, 2 );
 	}
 
 	/**
@@ -52,6 +53,32 @@ class Controller {
 			add_filter( $filter_column, [ $this, 'add_post_table_column' ], 1, 1 );
 			add_action( $filter_data, [ $this, 'set_post_column_data' ], 10, 2 );
 		}
+	}
+
+	/**
+	 * @param $post_type
+	 * @param $post
+	 */
+	public function add_meta_box( $post_type, $post ) {
+		$settings = $this->get_settings();
+		if ( ! in_array( $post_type, $settings['types'] ) ) {
+			return;
+		}
+
+		add_meta_box(
+			'mb_post_visits_counter',           // Unique ID
+			'Current Post Visits Count',  // Box title
+			[ $this, 'set_metabox_counter' ],  // Content callback, must be of type callable
+			$post_type                   // Post type
+		);
+	}
+
+	/**
+	 * @param \WP_Post $post
+	 */
+	public function set_metabox_counter( \WP_Post $post ) {
+		$counter = get_post_meta( $post->ID, self::META_COUNTER, true ) ?: 0;
+		echo '<input type = "text" value = "' . $counter . '" readonly>';
 	}
 
 	/**
