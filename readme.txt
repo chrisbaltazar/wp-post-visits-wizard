@@ -1,7 +1,7 @@
 === WP Post Visits Wizard ===
 Contributors: christianbaltazar
 Donate link: https://paypal.me/pools/c/8npKpqMHCF
-Tags: comments, notifications, email
+Tags: visits, counter, sorting, order, posts
 Requires at least: 4.6
 Tested up to: 5.3
 Stable tag: 1.0
