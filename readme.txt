@@ -4,7 +4,7 @@ Donate link: https://paypal.me/pools/c/8npKpqMHCF
 Tags: comments, notifications, email
 Requires at least: 4.6
 Tested up to: 5.3
-Stable tag: 1.2
+Stable tag: 1.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,8 +24,9 @@ After installation go to your admin dashboard / Settings / WP Post Visits Wizard
 == Screenshots ==
 
 1. Select any of the POST TYPES you want to manahe with the plugin, and / or their categories, tags as well
-2. Monitor from your admin dashboard the current visits value for every post
-3. Display automatically your posts with the most visited on the top
+2. Monitor from your admin dashboard a general view about your results
+3. Check inside every post the current visit count value
+4. Display automatically your posts most visited on the top
 
 == Installation ==
 
