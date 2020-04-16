@@ -195,11 +195,11 @@ class Controller {
 			return false;
 		}
 
-		if ( $query->is_category() && ! in_array( $query->get( 'category_name' ), $settings['categories'] ) ) {
+		if ( $query->is_category() && ! empty( $settings['categories'] ) && ! in_array( $query->get( 'category_name' ), $settings['categories'] ) ) {
 			return false;
 		}
 
-		if ( $query->is_tag() && ! in_array( $query->get( 'tag' ), $settings['tags'] ) ) {
+		if ( $query->is_tag() && ! empty( $settings['tags'] ) && ! in_array( $query->get( 'tag' ), $settings['tags'] ) ) {
 			return false;
 		}
 
