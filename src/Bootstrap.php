@@ -39,7 +39,7 @@ class Bootstrap {
 	 */
 	public static function init() {
 		$settings = Settings::init();
-		$obj      = new self( $settings, new Controller( $settings ) );
+		$obj      = new self( $settings, new Controller( $settings, new PostHandler() ) );
 
 		add_action( 'admin_enqueue_scripts', [ $obj, 'handle_assets' ] );
 
