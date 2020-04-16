@@ -4,7 +4,7 @@ Donate link: https://paypal.me/pools/c/8npKpqMHCF
 Tags: visits, counter, sorting, order, posts
 Requires at least: 4.6
 Tested up to: 5.3
-Stable tag: 1.0
+Stable tag: 1.0.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -34,6 +34,9 @@ After installation go to your admin dashboard / Settings / WP Post Visits Wizard
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix post sorting
 
 = 1.0 =
 * First plugin version in place
