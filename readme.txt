@@ -3,7 +3,7 @@ Contributors: christianbaltazar
 Donate link: https://paypal.me/pools/c/8npKpqMHCF
 Tags: visits, counter, sorting, order, posts
 Requires at least: 4.6
-Tested up to: 5.3
+Tested up to: 5.4
 Stable tag: 1.0.1
 Requires PHP: 7.0
 License: GPLv2 or later
