@@ -3,7 +3,7 @@
  * Plugin Name: WP Post Visits Wizard
  * Plugin URI: https://github.com/chrisbaltazar/wp-post-visits-wizard
  * Description: Light plugin to manage visits count for any post and order them as well while listing
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Chris Baltazar
  **/
 
